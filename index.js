@@ -14,6 +14,19 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+app.get("/health/smtp", async (req, res) => {
+  try {
+    await transporter.verify();
+    res.json({ smtp: "ok" });
+  } catch (err) {
+    res.status(500).json({
+      smtp: "fail",
+      error: err.message
+    });
+  }
+});
+
+
 app.post("/send", async (req, res) => {
   let { to, subject, html, from } = req.body;
 
