@@ -59,8 +59,7 @@ app.listen(PORT, () => console.log("SMTP API running"));
 
 
 
-
-import net from "net";
+const net = require("net");
 
 app.get("/test-smtp-connectivity", (req, res) => {
   const socket = net.createConnection(587, "smtp.gmail.com");
