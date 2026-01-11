@@ -56,3 +56,28 @@ app.post("/send", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("SMTP API running"));
+
+
+
+
+import net from "net";
+
+app.get("/test-smtp-connectivity", (req, res) => {
+  const socket = net.createConnection(587, "smtp.gmail.com");
+
+  socket.setTimeout(5000);
+
+  socket.on("connect", () => {
+    socket.destroy();
+    res.json({ smtp: "reachable" });
+  });
+
+  socket.on("timeout", () => {
+    socket.destroy();
+    res.json({ smtp: "timeout" });
+  });
+
+  socket.on("error", (err) => {
+    res.json({ smtp: "error", message: err.message });
+  });
+});
