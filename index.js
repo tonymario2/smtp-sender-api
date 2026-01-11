@@ -15,10 +15,16 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post("/send", async (req, res) => {
-  const { to, subject, html, from } = req.body;
+  let { to, subject, html, from } = req.body;
 
   if (!to || !subject || !html || !from) {
     return res.status(400).json({ error: "Missing fields" });
+  }
+
+  // 🔽 FIX: strip display name if present
+  const match = from.match(/<(.+?)>/);
+  if (match) {
+    from = match[1];
   }
 
   try {
